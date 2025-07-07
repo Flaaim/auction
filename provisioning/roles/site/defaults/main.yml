@@ -1,0 +1,4 @@
+certbot_email: mail@flaaim.pro
+certbot_hosts:
+  - flaaim.ru
+  - api.flaaim.ru
