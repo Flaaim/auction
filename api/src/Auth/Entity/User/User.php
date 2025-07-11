@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use ArrayObject;
 use DateTimeImmutable;
 use DomainException;
 
@@ -11,25 +12,36 @@ class User {
     private Id $id;
     private DateTimeImmutable $date;
     private Email $email;
-    private string $passwordHash;
-    private ?Token $joinConfirmToken;
+    private ?string $passwordHash = null;
+    private ?Token $joinConfirmToken = null;
     private Status $status;
+    private ArrayObject $networks;
 
-    public function __construct(
+    private function __construct(
         Id $id,
         DateTimeImmutable $date,
         Email $email,
-        string $passwordHash,
-        Token $token
+        Status $status
     ) {
         $this->id = $id;
         $this->date = $date;
         $this->email = $email;
-        $this->passwordHash = $passwordHash;
-        $this->joinConfirmToken = $token;
-        $this->status = Status::wait();
+        $this->status = $status;
+        $this->networks = new ArrayObject();
     }
-
+    public static function requestJoinByEmail(Id $id, DateTimeImmutable $date, Email $email, string $passwordHash, Token $token): self
+    {
+        $user = new self($id, $date, $email, Status::wait());
+        $user->passwordHash = $passwordHash;
+        $user->joinConfirmToken = $token;
+        return $user;
+    }
+    public static function joinByNetwork(Id $id, DateTimeImmutable $date, Email $email, NetworkIdentity $identity): self
+    {
+        $user = new self($id, $date, $email, Status::active());
+        $user->networks->append($identity);
+        return $user;
+    }
     public function getId(): Id
     {
         return $this->id;
@@ -72,5 +84,15 @@ class User {
         $this->joinConfirmToken->validate($token, $date);
         $this->status = Status::active();
         $this->joinConfirmToken = null;
+    }
+
+
+    /**
+     * @return NetworkIdentity[]
+     */
+    public function getNetworks(): array
+    {
+        /** @var NetworkIdentity[] */
+        return $this->networks->getArrayCopy();
     }
 }
