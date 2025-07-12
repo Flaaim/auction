@@ -10,4 +10,11 @@ interface UserRepository
     public function add(User $user): void;
     public function findByConfirmToken(string $token): ?User;
     public function hasByNetwork(NetworkIdentity $identity): bool;
+
+    /**
+     * @param Id $id
+     * @return User
+     * @throws \DomainException
+     */
+    public function get(Id $id): User;
 }
