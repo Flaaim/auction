@@ -12,10 +12,8 @@ class Email {
     public function __construct(string $value)
     {
         Assert::notEmpty($value);
+        Assert::email($value);
 
-        if(!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException();
-        }
         $this->value = mb_strtolower($value);
     }
     public function getValue(): string
