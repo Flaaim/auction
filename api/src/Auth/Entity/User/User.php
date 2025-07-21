@@ -16,6 +16,7 @@ class User {
     private ?Token $joinConfirmToken = null;
     private Status $status;
     private ArrayObject $networks;
+    private ?Token $passwordResetToken = null;
 
     private function __construct(
         Id $id,
@@ -66,7 +67,10 @@ class User {
     {
         return $this->joinConfirmToken;
     }
-
+    public function getPasswordResetToken(): ?Token
+    {
+        return $this->passwordResetToken;
+    }
     public function isActive(): bool
     {
         return $this->status->isActive();
@@ -94,7 +98,16 @@ class User {
         }
         $this->networks->append($identity);
     }
-
+    public function requestPasswordReset(Token $token, DateTimeImmutable $date): void
+    {
+        if(!$this->isActive()) {
+            throw new DomainException('User is not active.');
+        }
+        if($this->passwordResetToken !== null && !$this->passwordResetToken->isExpiredTo($date)) {
+            throw new DomainException('Resetting is already requested.');
+        }
+        $this->passwordResetToken = $token;
+    }
     /**
      * @return NetworkIdentity[]
      */
