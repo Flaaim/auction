@@ -18,6 +18,8 @@ class User {
     private Status $status;
     private ArrayObject $networks;
     private ?Token $passwordResetToken = null;
+    private ?Email $newEmail = null;
+    private ?Token $newEmailToken = null;
 
     private function __construct(
         Id $id,
@@ -127,6 +129,30 @@ class User {
             throw new DomainException('Incorrect current password.');
         }
         $this->passwordHash = $hasher->hash($new);
+    }
+    public function requestEmailChanging(Token $token, DateTimeImmutable $date, Email $email): void
+    {
+        if(!$this->isActive()) {
+            throw new DomainException('User is not active.');
+        }
+        if ($this->email->isEqualTo($email)) {
+            throw new DomainException('Email is already same.');
+        }
+        if ($this->newEmailToken !== null && !$this->newEmailToken->isExpiredTo($date)) {
+            throw new DomainException('Changing is already requested.');
+        }
+        $this->newEmail = $email;
+        $this->newEmailToken = $token;
+
+    }
+    public function getNewEmail(): ?Email
+    {
+        return $this->newEmail;
+    }
+
+    public function getNewEmailToken(): ?Token
+    {
+        return $this->newEmailToken;
     }
     /**
      * @return NetworkIdentity[]
