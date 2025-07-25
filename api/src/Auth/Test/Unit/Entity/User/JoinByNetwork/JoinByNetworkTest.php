@@ -5,6 +5,7 @@ namespace App\Auth\Test\Unit\Entity\User\JoinByNetwork;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\NetworkIdentity;
+use App\Auth\Entity\User\Role;
 use App\Auth\Entity\User\User;
 use DateTime;
 use DateTimeImmutable;
@@ -27,6 +28,8 @@ class JoinByNetworkTest extends TestCase
         self::assertEquals($user->getId(), $id);
         self::assertEquals($user->getDate(), $date);
         self::assertEquals($user->getEmail(), $email);
+
+        self::assertEquals(Role::USER, $user->getRole()->getName());
 
         self::assertCount(1, $networks = $user->getNetworks());
         self::assertEquals($network, $networks[0] ?? null);

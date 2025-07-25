@@ -20,6 +20,7 @@ class User {
     private ?Token $passwordResetToken = null;
     private ?Email $newEmail = null;
     private ?Token $newEmailToken = null;
+    private Role $role;
 
     private function __construct(
         Id $id,
@@ -31,6 +32,7 @@ class User {
         $this->date = $date;
         $this->email = $email;
         $this->status = $status;
+        $this->role = Role::user();
         $this->networks = new ArrayObject();
     }
     public static function requestJoinByEmail(Id $id, DateTimeImmutable $date, Email $email, string $passwordHash, Token $token): self
@@ -77,6 +79,10 @@ class User {
     public function isActive(): bool
     {
         return $this->status->isActive();
+    }
+    public function changeRole(Role $role): void
+    {
+        $this->role = $role;
     }
     public function isWait(): bool
     {
@@ -171,5 +177,10 @@ class User {
     {
         /** @var NetworkIdentity[] */
         return $this->networks->getArrayCopy();
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
     }
 }
