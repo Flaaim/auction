@@ -88,7 +88,12 @@ class User {
     {
         return $this->status->isWait();
     }
-
+    public function remove(): void
+    {
+        if (!$this->isWait()) {
+            throw new DomainException('Unable to remove active user.');
+        }
+    }
     public function confirmJoin(string $token, DateTimeImmutable $date): void
     {
         if ($this->joinConfirmToken === null) {
