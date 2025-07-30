@@ -9,6 +9,7 @@
     "require": {
         "php": "^7.4",
         "ext-json": "^7.4",
+        "doctrine/annotations": "^2.0",
         "doctrine/orm": "^2.20",
         "php-di/php-di": "^6.0",
         "ramsey/uuid": "^4.2",
