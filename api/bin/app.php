@@ -3,7 +3,10 @@
 
 declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
@@ -19,6 +22,12 @@ $cli = new Application('Console');
  */
 
 $commands = $container->get('config')['console']['commands'];
+
+/** @var EntityManagerInterface $entityManager */
+$entityManager = $container->get(EntityManagerInterface::class);
+$entityManagerProvider = new SingleManagerProvider($entityManager);
+
+
 foreach ($commands as $name) {
     /** @var Command $command */
     $command = $container->get($name);

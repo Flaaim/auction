@@ -14,10 +14,20 @@ use Psr\Container\ContainerInterface;
 return [
     EntityManagerInterface::class => function (ContainerInterface $container): EntityManagerInterface {
 
-
+        /**
+         * @psalm-suppress MixedArrayAccess
+         * @psalm-var array {
+         *     metadata_dirs:array,
+         *     dev_mode:bool,
+         *     proxy_dir:string,
+         *     cache_dir:?string,
+         *     types:array<string,string>,
+         *     connection:array
+         * } $settings
+         */
         $settings = $container->get('config')['doctrine'];
 
-        $config = ORMSetup::createAttributeMetadataConfiguration(
+        $config = ORMSetup::createAnnotationMetadataConfiguration(
             $settings['metadata_dirs'],
             $settings['dev_mode'],
             $settings['proxy_dir'],
