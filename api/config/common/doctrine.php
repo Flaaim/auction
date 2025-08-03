@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
@@ -35,6 +36,11 @@ return [
         );
 
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
+        foreach ($settings['types'] as $name => $class) {
+            if (!Type::hasType($name)) {
+                Type::addType($name, $class);
+            }
+        }
 
         $connection = DriverManager::getConnection(
             $settings['connection'],
@@ -60,6 +66,9 @@ return [
             ],
             'metadata_dirs' => [
                 __DIR__ . '/../../src/Auth/Entity'
+            ],
+            'types' => [
+                App\Auth\Entity\User\IdType::NAME => App\Auth\Entity\User\IdType::class,
             ],
         ],
     ],
