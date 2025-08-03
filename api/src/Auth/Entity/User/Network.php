@@ -4,7 +4,7 @@ namespace App\Auth\Entity\User;
 
 use Webmozart\Assert\Assert;
 
-class NetworkIdentity
+class Network
 {
     private string $network;
     private string $identity;

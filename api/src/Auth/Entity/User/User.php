@@ -42,7 +42,7 @@ class User {
         $user->joinConfirmToken = $token;
         return $user;
     }
-    public static function joinByNetwork(Id $id, DateTimeImmutable $date, Email $email, NetworkIdentity $identity): self
+    public static function joinByNetwork(Id $id, DateTimeImmutable $date, Email $email, Network $identity): self
     {
         $user = new self($id, $date, $email, Status::active());
         $user->networks->append($identity);
@@ -103,7 +103,7 @@ class User {
         $this->status = Status::active();
         $this->joinConfirmToken = null;
     }
-    public function attachNetwork(NetworkIdentity $identity): void
+    public function attachNetwork(Network $identity): void
     {
         foreach ($this->networks as $network) {
             if($network->isEqualTo($identity)) {
@@ -176,11 +176,11 @@ class User {
         $this->newEmailToken = null;
     }
     /**
-     * @return NetworkIdentity[]
+     * @return Network[]
      */
     public function getNetworks(): array
     {
-        /** @var NetworkIdentity[] */
+        /** @var Network[] */
         return $this->networks->getArrayCopy();
     }
 

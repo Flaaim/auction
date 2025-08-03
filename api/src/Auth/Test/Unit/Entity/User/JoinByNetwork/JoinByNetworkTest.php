@@ -4,10 +4,9 @@ namespace App\Auth\Test\Unit\Entity\User\JoinByNetwork;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Id;
-use App\Auth\Entity\User\NetworkIdentity;
+use App\Auth\Entity\User\Network;
 use App\Auth\Entity\User\Role;
 use App\Auth\Entity\User\User;
-use DateTime;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +18,7 @@ class JoinByNetworkTest extends TestCase
             $id = Id::generate(),
             $date = new DateTimeImmutable(),
             $email = new Email('some@email.com'),
-            $network = new NetworkIdentity('google.com', '000011'),
+            $network = new Network('google.com', '000011'),
         );
 
         self::assertTrue($user->isActive());
