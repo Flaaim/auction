@@ -16,11 +16,11 @@ class User {
     private ?string $passwordHash = null;
     private ?Token $joinConfirmToken = null;
     private Status $status;
-    private ArrayObject $networks;
     private ?Token $passwordResetToken = null;
     private ?Email $newEmail = null;
     private ?Token $newEmailToken = null;
     private Role $role;
+    private ArrayObject $networks;
 
     private function __construct(
         Id $id,
