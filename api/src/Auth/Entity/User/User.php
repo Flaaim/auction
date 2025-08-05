@@ -7,6 +7,8 @@ namespace App\Auth\Entity\User;
 use App\Auth\Service\PasswordHasher;
 use ArrayObject;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 
@@ -57,7 +59,7 @@ class User {
      * @ORM\Column(type="auth_user_role", length=16)
      */
     private Role $role;
-    private ArrayObject $networks;
+    private Collection $networks;
 
     private function __construct(
         Id $id,
@@ -70,7 +72,7 @@ class User {
         $this->email = $email;
         $this->status = $status;
         $this->role = Role::user();
-        $this->networks = new ArrayObject();
+        $this->networks = new ArrayCollection();
     }
     public static function requestJoinByEmail(Id $id, DateTimeImmutable $date, Email $email, string $passwordHash, Token $token): self
     {
@@ -82,7 +84,7 @@ class User {
     public static function joinByNetwork(Id $id, DateTimeImmutable $date, Email $email, Network $identity): self
     {
         $user = new self($id, $date, $email, Status::active());
-        $user->networks->append($identity);
+        $user->networks->add($identity);
         return $user;
     }
     public function getId(): Id
@@ -147,7 +149,7 @@ class User {
                 throw new DomainException('Network is already attached.');
             }
         }
-        $this->networks->append($identity);
+        $this->networks->add($identity);
     }
     public function requestPasswordReset(Token $token, DateTimeImmutable $date): void
     {
@@ -218,7 +220,7 @@ class User {
     public function getNetworks(): array
     {
         /** @var Network[] */
-        return $this->networks->getArrayCopy();
+        return $this->networks->toArray();
     }
 
     public function getRole(): Role
