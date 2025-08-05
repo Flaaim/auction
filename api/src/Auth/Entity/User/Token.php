@@ -57,4 +57,9 @@ class Token
     {
         return $this->value === $value;
     }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->value);
+    }
 }
