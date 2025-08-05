@@ -59,6 +59,9 @@ class User {
      * @ORM\Column(type="auth_user_role", length=16)
      */
     private Role $role;
+    /**
+     * @ORM\OneToMany(targetEntity="UserNetwork", mappedBy="user", cascade={"all"}, orphanRemoval=true)
+     */
     private Collection $networks;
 
     private function __construct(
@@ -81,10 +84,10 @@ class User {
         $user->joinConfirmToken = $token;
         return $user;
     }
-    public static function joinByNetwork(Id $id, DateTimeImmutable $date, Email $email, Network $identity): self
+    public static function joinByNetwork(Id $id, DateTimeImmutable $date, Email $email, Network $network): self
     {
         $user = new self($id, $date, $email, Status::active());
-        $user->networks->add($identity);
+        $user->networks->add(new UserNetwork($user, $network));
         return $user;
     }
     public function getId(): Id
@@ -142,14 +145,15 @@ class User {
         $this->status = Status::active();
         $this->joinConfirmToken = null;
     }
-    public function attachNetwork(Network $identity): void
+    public function attachNetwork(Network $network): void
     {
-        foreach ($this->networks as $network) {
-            if($network->isEqualTo($identity)) {
+        /** @var UserNetwork $existing */
+        foreach ($this->networks as $existing) {
+            if($existing->getNetwork()->isEqualTo($network)) {
                 throw new DomainException('Network is already attached.');
             }
         }
-        $this->networks->add($identity);
+        $this->networks->add(new UserNetwork($this, $network));
     }
     public function requestPasswordReset(Token $token, DateTimeImmutable $date): void
     {
@@ -220,7 +224,9 @@ class User {
     public function getNetworks(): array
     {
         /** @var Network[] */
-        return $this->networks->toArray();
+        return $this->networks->map(static function (UserNetwork $network) {
+            return $network->getNetwork();
+        })->toArray();
     }
 
     public function getRole(): Role
