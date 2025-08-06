@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\ORMSetup;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
 
@@ -57,7 +59,6 @@ return [
             'proxy_dir' => __DIR__ . '/../../var/cache/doctrine/proxy',
             'connection' => [
                 'driver' => 'pdo_pgsql',
-                'url' => getenv('DB_URL'),
                 'host' => getenv('DB_HOST'),
                 'user' => getenv('DB_USER'),
                 'password' => getenv('DB_PASSWORD'),
@@ -75,4 +76,8 @@ return [
             ],
         ],
     ],
+
+    EntityManagerProvider::class => function (ContainerInterface $container): SingleManagerProvider {
+        return new SingleManagerProvider($container->get(EntityManagerInterface::class));
+    },
 ];

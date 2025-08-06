@@ -3,10 +3,8 @@
 
 declare(strict_types=1);
 
-
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
@@ -22,11 +20,9 @@ $cli = new Application('Console');
  */
 
 $commands = $container->get('config')['console']['commands'];
+$entityManagerInterface = $container->get(EntityManagerInterface::class);
 
-/** @var EntityManagerInterface $entityManager */
-$entityManager = $container->get(EntityManagerInterface::class);
-$entityManagerProvider = new SingleManagerProvider($entityManager);
-
+$cli->getHelperSet()->set(new EntityManagerHelper($entityManagerInterface), 'em');
 
 foreach ($commands as $name) {
     /** @var Command $command */

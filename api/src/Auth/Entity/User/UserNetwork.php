@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Auth\Entity\User;
 
 use Ramsey\Uuid\Uuid;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(readOnly=true)

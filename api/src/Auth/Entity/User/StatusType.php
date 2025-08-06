@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\StringType;
 
 class StatusType extends StringType
 {
-    const NAME = 'user_auth_status';
+    const NAME = 'auth_user_status';
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         return $value instanceof Status ? $value->getName() : $value;
