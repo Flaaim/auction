@@ -13,7 +13,7 @@ class Handler
     }
     public function handle(Command $command): void
     {
-        if(!$user = $this->users->findByConfirmToken($command->token)){
+        if(!$user = $this->users->findByJoinConfirmToken($command->token)){
             throw new \DomainException('Invalid confirm token');
         }
         $user->confirmJoin($command->token, new \DateTimeImmutable());
