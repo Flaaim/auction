@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -21,8 +23,19 @@ $cli = new Application('Console');
 
 $commands = $container->get('config')['console']['commands'];
 $entityManagerInterface = $container->get(EntityManagerInterface::class);
+$connection = $entityManagerInterface->getConnection();
+
+$configuration = new Configuration($connection);
+$configuration->setMigrationsDirectory(__DIR__ . '/../src/Data/Migration');
+$configuration->setMigrationsNamespace('App\Data\Migration');
+$configuration->setMigrationsTableName('migrations');
+$configuration->setAllOrNothing(true);
+$configuration->setCheckDatabasePlatform(false);
 
 $cli->getHelperSet()->set(new EntityManagerHelper($entityManagerInterface), 'em');
+$cli->getHelperSet()->set(new ConfigurationHelper($connection, $configuration), 'configuration');
+
+Doctrine\Migrations\Tools\Console\ConsoleRunner::addCommands($cli);
 
 foreach ($commands as $name) {
     /** @var Command $command */
