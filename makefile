@@ -36,6 +36,9 @@ api-init: api-permissions api-composer-install
 api-composer-install:
 	docker-compose run --rm api-php-cli composer install
 
+api-migration:
+	docker-compose run --rm api-php-cli composer app migrations:migrate
+
 api-permissions:
 	docker run --rm -v ${PWD}/api:/app -w /app alpine chmod 777 var
 
