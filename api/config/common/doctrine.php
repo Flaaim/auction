@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+use Doctrine\Common\EventManager;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
@@ -25,6 +27,7 @@ return [
          *     proxy_dir:string,
          *     cache_dir:?string,
          *     types:array<string,string>,
+         *     subscribers:string[],
          *     connection:array
          * } $settings
          */
@@ -48,8 +51,15 @@ return [
             $settings['connection'],
             $config
         );
+        $eventManager = new EventManager();
 
-        return new EntityManager($connection, $config);
+        foreach ($settings['subscribers'] as $name) {
+            /** @var EventSubscriber $subscriber */
+            $subscriber = $container->get($name);
+            $eventManager->addEventSubscriber($subscriber);
+        }
+
+        return new EntityManager($connection, $config, $eventManager);
     },
 
     'config' => [
@@ -65,6 +75,7 @@ return [
                 'dbname' => getenv('DB_NAME'),
                 'charset' => 'utf-8'
             ],
+            'subscribers' => [],
             'metadata_dirs' => [
                 __DIR__ . '/../../src/Auth/Entity'
             ],
