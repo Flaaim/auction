@@ -10,7 +10,6 @@ return [
     'config' => [
         'console' => [
             'commands' => [
-                Console\HelloCommand::class,
                 ValidateSchemaCommand::class,
 
                 Migrations\Tools\Console\Command\ExecuteCommand::class,
