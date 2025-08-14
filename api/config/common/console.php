@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Console;
 use Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand;
 use Doctrine\Migrations;
 

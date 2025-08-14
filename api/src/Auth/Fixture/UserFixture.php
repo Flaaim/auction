@@ -18,7 +18,7 @@ class UserFixture extends AbstractFixture
     private const PASSWORD_HASH = '$2y$12$qwnND33o8DGWvFoepotSju7eTAQ6gzLD/zy6W8NCVtiHPbkybz.w6';
     public function load(ObjectManager $manager)
     {
-        
+
         $user = User::requestJoinByEmail(
             new Id('00000000-0000-0000-0000-000000000001'),
             $date = new DateTimeImmutable('-30 days'),
