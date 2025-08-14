@@ -22,6 +22,7 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
+        "doctrine/data-fixtures": "^1.6",
         "overtrue/phplint": "^3.4.0",
         "phpunit/phpunit": "^9.6",
         "roave/security-advisories": "dev-master",
