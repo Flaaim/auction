@@ -19,6 +19,7 @@
         "slim/slim": "^4.14",
         "symfony/cache": "^5.4",
         "symfony/console": "^5.0",
+        "symfony/mailer": "^5.4",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
