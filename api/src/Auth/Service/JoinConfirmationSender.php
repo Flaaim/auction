@@ -6,8 +6,28 @@ namespace App\Auth\Service;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
-interface JoinConfirmationSender
+class JoinConfirmationSender
 {
-    public function send(Email $email, Token $token): void;
+    private MailerInterface $mailer;
+    private array $from;
+    public function __construct(MailerInterface $mailer, array $from)
+    {
+        $this->mailer = $mailer;
+        $this->from = $from;
+    }
+    public function send(Email $email, Token $token): void
+    {
+        $message = (new \Symfony\Component\Mime\Email())
+            ->subject('Join confirmation')
+            ->from(new Address(...$this->from))
+            ->to(new Address($email->getValue()))
+            ->html('/join/confirm?' . http_build_query([
+                    'token' => $token->getValue(),
+            ]));
+
+        $this->mailer->send($message);
+    }
 }

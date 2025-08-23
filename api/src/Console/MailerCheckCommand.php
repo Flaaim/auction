@@ -2,15 +2,23 @@
 
 namespace App\Console;
 
+use App\Auth\Entity\User\Email;
+use App\Auth\Entity\User\Token;
+use App\Auth\Service\JoinConfirmationSender;
+
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
-use Symfony\Component\Mime\Email;
 
 class MailerCheckCommand extends Command
 {
+    private JoinConfirmationSender $confirmationSender;
+    public function __construct(JoinConfirmationSender $confirmationSender)
+    {
+        parent::__construct();
+        $this->confirmationSender = $confirmationSender;
+    }
     protected function configure()
     {
         $this->setName('mailer:check');
@@ -20,21 +28,11 @@ class MailerCheckCommand extends Command
     {
         $output->writeln('<comment>Sending</comment>');
 
-        $transport = (new EsmtpTransport('mailer', '1025'))
-            ->setUsername('app')
-            ->setPassword('secret');
+        $this->confirmationSender->send(
+            new Email('user@app.test'),
+            new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable())
+        );
 
-        $mailer = new Mailer($transport);
-
-        $message = (new Email())
-            ->subject('Join confirmation')
-            ->from('mail@test.app')
-            ->to('user@test.app')
-            ->text('confirm');
-
-        if($mailer->send($message) === 0){
-            throw new \RuntimeException('Unable to send email.');
-        }
         $output->writeln('<info>Email sent.</info>');
 
         return 0;
