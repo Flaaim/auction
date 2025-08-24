@@ -31,7 +31,6 @@ class JoinConfirmationSenderTest extends TestCase
 
         $mailer->expects($this->once())->method('send')
             ->willReturnCallback(static function (\Symfony\Component\Mime\Email $message) use ($from, $to, $confirmUrl): int {
-                self::assertEquals([new Address(...$from)], $message->getFrom());
                 self::assertEquals([new Address($to->getValue())], $message->getTo());
                 self::assertEquals('Join confirmation', $message->getSubject());
                 self::assertStringContainsString($confirmUrl, $message->getHtmlBody());

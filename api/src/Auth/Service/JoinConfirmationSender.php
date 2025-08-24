@@ -22,7 +22,6 @@ class JoinConfirmationSender
     {
         $message = (new \Symfony\Component\Mime\Email())
             ->subject('Join confirmation')
-            ->from(new Address(...$this->from))
             ->to(new Address($email->getValue()))
             ->html('/join/confirm?' . http_build_query([
                     'token' => $token->getValue(),
