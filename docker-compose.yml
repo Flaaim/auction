@@ -49,6 +49,7 @@ services:
       MAILER_ENCRYPTION: tcp
       MAILER_FROM_EMAIL: mail@app.test
       MAILER_FROM_NAME: Auction
+      FRONTEND_URL: http://localhost:8000
     volumes:
       - ./api:/app
 
@@ -70,7 +71,7 @@ services:
       MAILER_ENCRYPTION: tcp
       MAILER_FROM_EMAIL:  mail@app.test
       MAILER_FROM_NAME: Auction
-
+      FRONTEND_URL: http://localhost:8000
     volumes:
       - ./api:/app
 
