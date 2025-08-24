@@ -12,11 +12,9 @@ use Symfony\Component\Mime\Address;
 class JoinConfirmationSender
 {
     private MailerInterface $mailer;
-    private array $from;
-    public function __construct(MailerInterface $mailer, array $from)
+    public function __construct(MailerInterface $mailer)
     {
         $this->mailer = $mailer;
-        $this->from = $from;
     }
     public function send(Email $email, Token $token): void
     {

@@ -48,6 +48,7 @@ services:
       MAILER_PASSWORD: secret
       MAILER_ENCRYPTION: tcp
       MAILER_FROM_EMAIL: mail@app.test
+      MAILER_FROM_NAME: Auction
     volumes:
       - ./api:/app
 
@@ -69,6 +70,7 @@ services:
       MAILER_ENCRYPTION: tcp
       MAILER_FROM_EMAIL:  mail@app.test
       MAILER_FROM_NAME: Auction
+
     volumes:
       - ./api:/app
 

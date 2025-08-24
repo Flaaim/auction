@@ -22,8 +22,7 @@ return [
         $mailerConfig = $container->get('config')['mailer'];
 
         return new JoinConfirmationSender(
-            $container->get(Mailer::class),
-            $mailerConfig['from']
+            $container->get(Mailer::class)
         );
     }
 ];
