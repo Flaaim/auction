@@ -6,8 +6,28 @@ namespace App\Auth\Service;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Twig\Environment;
 
-interface NewEmailConfirmTokenSender
+class NewEmailConfirmTokenSender
 {
-    public function send(Email $email, Token $token): void;
+    private MailerInterface $mailer;
+    private Environment $twig;
+    public function __construct(MailerInterface $mailer, Environment $twig)
+    {
+        $this->mailer = $mailer;
+        $this->twig = $twig;
+    }
+    public function send(Email $email, Token $token): void
+    {
+        $message = (new \Symfony\Component\Mime\Email())
+            ->subject('New Email Confirmation')
+            ->to(new Address($email->getValue()))
+            ->html($this->twig->render(
+                'auth/email/confirm.html.twig',
+                ['token' => $token]
+            ));
+        $this->mailer->send($message);
+    }
 }
