@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\EventListener\EnvelopeListener;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;

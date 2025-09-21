@@ -24,9 +24,7 @@ return [
     JoinConfirmationSender::class => function (ContainerInterface $container): JoinConfirmationSender {
 
         $mailer = $container->get(Mailer::class);
-        $urlGenerator = $container->get(FrontendUrlGenerator::class);
         $twig = $container->get(Environment::class);
-
-        return new JoinConfirmationSender($mailer, $urlGenerator, $twig);
+        return new JoinConfirmationSender($mailer, $twig);
     }
 ];
