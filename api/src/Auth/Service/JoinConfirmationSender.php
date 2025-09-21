@@ -15,13 +15,11 @@ use Twig\Environment;
 class JoinConfirmationSender
 {
     private MailerInterface $mailer;
-    private FrontendUrlGenerator $frontend;
     private Environment $twig;
 
-    public function __construct(MailerInterface $mailer,  FrontendUrlGenerator $frontend, Environment $twig)
+    public function __construct(MailerInterface $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
-        $this->frontend = $frontend;
         $this->twig = $twig;
     }
     public function send(Email $email, Token $token): void
@@ -29,9 +27,7 @@ class JoinConfirmationSender
         $message = (new \Symfony\Component\Mime\Email())
             ->subject('Join confirmation')
             ->to(new Address($email->getValue()))
-            ->html($this->twig->render('auth/join/confirm.html.twig', [
-                'url' => $this->frontend->generate('join/confirm', ['token' => $token->getValue()])
-            ]));
+            ->html($this->twig->render('auth/join/confirm.html.twig', ['token' => $token]));
 
         $this->mailer->send($message);
     }
