@@ -13,6 +13,7 @@
         "doctrine/migrations": "^2.2",
         "doctrine/orm": "^2.7",
         "laminas/laminas-config-aggregator": "^1.9",
+        "monolog/monolog": "^2.10",
         "php-di/php-di": "^6.0",
         "ramsey/uuid": "^4.2",
         "slim/psr7": "^1.6",
