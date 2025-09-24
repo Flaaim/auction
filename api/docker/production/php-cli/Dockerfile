@@ -39,3 +39,5 @@ WORKDIR /app
 COPY --from=builder /app ./
 
 COPY ./ ./
+
+RUN chown www-data:www-data ./var -R
