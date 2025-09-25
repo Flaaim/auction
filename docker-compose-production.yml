@@ -36,6 +36,7 @@ services:
       MAILER_PASSWORD: ${API_MAILER_PASSWORD}
       MAILER_ENCRYPTION: tls
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
+      SENTRY_DSN: ${SENTRY_DSN}
   api-php-cli:
     image: ${REGISTRY}/auction-api-php-cli:${IMAGE_TAG}
     environment:
@@ -51,6 +52,7 @@ services:
       MAILER_PASSWORD: ${API_MAILER_PASSWORD}
       MAILER_ENCRYPTION: tls
       MAILER_FROM_EMAIL: ${API_MAILER_FROM_EMAIL}
+      SENTRY_DSN: ${SENTRY_DSN}
 
   api-postgres:
     image: postgres:12.2-alpine

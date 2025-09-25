@@ -12,10 +12,17 @@ use Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+
+if (getenv('SENTRY_DSN')) {
+    $cli->setCatchExceptions(false);
+}
+
 $container = require __DIR__ . '/../config/container.php';
 
 $cli = new Application('Console');
-
+if (getenv('SENTRY_DSN')) {
+    $cli->setCatchExceptions(false);
+}
 /**
  * @var string[] $commands
  * @psalm-suppress MixedArrayAccess
