@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\ErrorHandler\LogErrorHandler;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Slim\CallableResolver;
 use Slim\Handlers\ErrorHandler;
 use Slim\Interfaces\CallableResolverInterface;
@@ -26,19 +28,21 @@ return [
             $callableResolver,
             $responseFactory,
             $config['display_details'],
-            $config['log'],
+            true,
             true
         );
 
+        /** @var LoggerInterface $logger */
+        $logger = $container->get(LoggerInterface::class);
+
         $middleware->setDefaultErrorHandler(
-            new ErrorHandler($callableResolver, $responseFactory)
+            new LogErrorHandler($callableResolver, $responseFactory, $logger)
         );
         return $middleware;
     },
     'config' => [
         'errors' => [
             'display_details' => (bool)getenv('APP_DEBUG'),
-            'log' => true,
         ],
     ],
 ];
