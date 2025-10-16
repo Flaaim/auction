@@ -22,7 +22,7 @@ class RequestTest extends WebTestCase
         ]));
 
         $this->assertEquals(201, $response->getStatusCode());
-        self::assertEquals('{}', (string)$response->getBody());
+        self::assertEquals('', (string)$response->getBody());
     }
 
     public function testExisting(): void
