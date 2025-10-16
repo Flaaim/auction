@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\UserRepository;
 use App\Auth\Service\JoinConfirmationSender;
+use App\Auth\Service\Tokenizer;
 use App\Frontend\FrontendUrlGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -21,10 +22,18 @@ return [
         $repo = $em->getRepository(User::class);
         return new UserRepository($em, $repo);
     },
-    JoinConfirmationSender::class => function (ContainerInterface $container): JoinConfirmationSender {
+    Tokenizer::class  => function (ContainerInterface $container) {
+        /**
+         * @psalm-suppress MixedArrayAccess
+         * @psalm-var array{token_ttl:string} $config
+         */
+        $config = $container->get('config')['auth'];
 
-        $mailer = $container->get(Mailer::class);
-        $twig = $container->get(Environment::class);
-        return new JoinConfirmationSender($mailer, $twig);
-    }
+        return new Tokenizer(new DateInterval($config['token_ttl']));
+    },
+    'config' => [
+        'auth' => [
+            'token_ttl' => 'PT1H',
+        ]
+    ],
 ];
