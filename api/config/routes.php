@@ -2,9 +2,18 @@
 
 declare(strict_types=1);
 
-use App\Http;
+
+use App\Http\Action\HomeAction;
+use App\Http\Action;
 use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
 
 return static function (App $app) {
-    $app->get('/', Http\Action\HomeAction::class);
+    $app->get('/', HomeAction::class);
+
+    $app->group('/v1', function (RouteCollectorProxy $group): void {
+        $group->group('/auth', function (RouteCollectorProxy $group): void {
+            $group->post('/join', Action\V1\Auth\Join\RequestAction::class);
+        });
+    });
 };

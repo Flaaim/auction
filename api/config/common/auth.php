@@ -6,11 +6,12 @@ use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\UserRepository;
 use App\Auth\Service\JoinConfirmationSender;
 use App\Auth\Service\Tokenizer;
-use App\Frontend\FrontendUrlGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Psr\Container\ContainerInterface;
+
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
 use Twig\Environment;
 
 
@@ -30,6 +31,13 @@ return [
         $config = $container->get('config')['auth'];
 
         return new Tokenizer(new DateInterval($config['token_ttl']));
+    },
+    JoinConfirmationSender::class => function (ContainerInterface $container): JoinConfirmationSender {
+
+        return new JoinConfirmationSender(
+            $container->get(Mailer::class),
+            $container->get(Environment::class),
+        );
     },
     'config' => [
         'auth' => [

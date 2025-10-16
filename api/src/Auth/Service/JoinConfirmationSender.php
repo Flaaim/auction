@@ -6,8 +6,6 @@ namespace App\Auth\Service;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
-use App\Frontend\FrontendUrlGenerator;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Twig\Environment;
