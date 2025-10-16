@@ -30,7 +30,6 @@ return [
             'commands' => [
                 FixturesLoadCommand::class,
                 SchemaTool\DropCommand::class,
-                MailerCheckCommand::class,
 
                 Migrations\Tools\Console\Command\DiffCommand::class,
                 Migrations\Tools\Console\Command\GenerateCommand::class,
