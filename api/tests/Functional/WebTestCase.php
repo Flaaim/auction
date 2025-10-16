@@ -16,11 +16,20 @@ use Slim\Psr7\Factory\ServerRequestFactory;
 class WebTestCase extends TestCase
 {
     private ?App $app = null;
+    private ?MailerClient $mailer = null;
 
     protected function tearDown(): void
     {
         $this->app = null;
         parent::tearDown();
+    }
+
+    protected function mailer(): MailerClient
+    {
+        if ($this->mailer === null) {
+            $this->mailer = new MailerClient();
+        }
+        return $this->mailer;
     }
     protected static function json(string $method, string $path, array $body = []): ServerRequestInterface
     {
